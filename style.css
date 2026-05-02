@@ -30,13 +30,26 @@ body {
   min-height: 90vh; 
 }
 
+/* Flexbox logic for the top header row */
 .header-flex { 
   display: flex; 
   justify-content: space-between; 
-  align-items: flex-end; 
+  align-items: center; 
   margin-bottom: 30px; 
   border-bottom: 1px solid var(--frame-color); 
   padding-bottom: 10px; 
+}
+
+/* Aligns logo and h1 horizontally */
+.title-container {
+    display: flex;
+    align-items: center;
+    gap: 15px; 
+}
+
+.header-logo {
+    height: 60px; /* Adjust this to make your emblem larger or smaller */
+    width: auto;
 }
 
 h1 { color: var(--header-rose); font-family: serif; font-size: 2.5rem; margin: 0; }
@@ -48,6 +61,7 @@ h1 { color: var(--header-rose); font-family: serif; font-size: 2.5rem; margin: 0
   gap: 20px; 
 }
 
+/* Card Styling */
 .report-card { border: 2px solid #000; outline-offset: -8px; position: relative; padding: 25px; background: transparent; }
 .card-good { outline: 2px solid #2ecc71; }
 .card-declining { outline: 2px solid #e74c3c; }

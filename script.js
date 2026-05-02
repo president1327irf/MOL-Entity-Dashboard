@@ -66,7 +66,7 @@ function renderDashboard(data) {
     }).join('');
 }
 
-// Start the process
+
 loadData();
 
 // Refresh data every 2 minutes
