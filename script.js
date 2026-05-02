@@ -1,4 +1,4 @@
-const scriptURL = "https://script.google.com/macros/s/AKfycbxREzC6Ie-mBqgvm0vVKmfsgDu27Hh1sKhOI7oZP5tCWBv-4ejM5wBnwQh93QsIHvaEnQ/exec";
+const scriptURL = "PASTE_YOUR_NEW_URL_HERE";
 
 async function loadData() {
     try {
@@ -6,76 +6,96 @@ async function loadData() {
         const data = await response.json();
         processDashboard(data);
     } catch (e) { 
-        document.getElementById('entity-grid').innerHTML = `<div style="color:white;text-align:center;">FETCH ERROR: Check Apps Script Permissions</div>`;
+        console.error("Fetch Error:", e);
     }
 }
 
 function processDashboard(data) {
     const { master, logs } = data;
     const now = new Date();
-    const oneWeekAgo = new Date(now.getTime() - (7 * 24 * 60 * 60 * 1000));
-    const twoWeeksAgo = new Date(now.getTime() - (14 * 24 * 60 * 60 * 1000));
+    
+    // Monday Reset Logic
+    const currentMonday = new Date(now);
+    currentMonday.setDate(now.getDate() - (now.getDay() === 0 ? 6 : now.getDay() - 1));
+    currentMonday.setHours(0,0,0,0);
 
     const logStats = {};
     const hosterCounts = {};
-    const entityGrowth = {}; // To track logs this week vs last week
+    let topXP = -1;
+    let topEntityName = "N/A";
 
-    logs.forEach(row => {
-        const time = new Date(row[0]);
-        const hoster = row[1]; // Column B
-        const entity = row[2]; // Column C
-        const type = row[3];   // Column D
-
-        if (type === "Event Logging") {
-            // Leaderboard logic
-            hosterCounts[hoster] = (hosterCounts[hoster] || 0) + 1;
-            
-            // Timeline logic
-            if (!logStats[entity]) logStats[entity] = { d7:0, d14:0, d28:0, currentWeek:0, lastWeek:0 };
-            const diff = (now - time) / (1000*60*60*24);
-            if (diff <= 7) { logStats[entity].d7++; logStats[entity].currentWeek++; }
-            else if (diff <= 14) { logStats[entity].d14++; logStats[entity].lastWeek++; }
-            if (diff <= 28) logStats[entity].d28++;
+    // 1. Process Master Tracker (Tab 3)
+    master.forEach(row => {
+        const name = row[3]; // Entity Name
+        const xp = parseInt(row[6]) || 0; // Weekly XP
+        if (name && xp > topXP) {
+            topXP = xp;
+            topEntityName = name;
         }
     });
 
-    const topHoster = Object.entries(hosterCounts).sort((a,b) => b[1]-a[1])[0];
-    document.getElementById('best-hoster').innerText = topHoster ? `${topHoster[0]} (${topHoster[1]})` : "---";
+    // 2. Process Logs (Tab 17) - Mapping Col B (Hoster) and Col C (Entity)
+    logs.forEach(row => {
+        const time = new Date(row[0]);
+        const hoster = row[1]; 
+        const entity = row[2];
+        
+        if (row[3] === "Event Logging" && time >= currentMonday) {
+            // Leaderboard data
+            if (hoster) hosterCounts[hoster] = (hosterCounts[hoster] || 0) + 1;
+            
+            // Entity activity data
+            if (entity) {
+                if (!logStats[entity]) logStats[entity] = 0;
+                logStats[entity]++;
+            }
+        }
+    });
 
+    // Update Top Cards
+    document.getElementById('best-entity').innerText = topEntityName;
+    document.getElementById('best-entity-xp').innerText = `${topXP} XP THIS WEEK`;
+    
+    const topHoster = Object.entries(hosterCounts).sort((a,b) => b[1]-a[1])[0];
+    document.getElementById('best-hoster').innerText = topHoster ? topHoster[0] : "---";
+    document.getElementById('best-hoster-count').innerText = topHoster ? `${topHoster[1]} EVENTS HOSTED` : "0 EVENTS";
+
+    // 3. Render Grid with Status Tags
     const grid = document.getElementById('entity-grid');
     grid.innerHTML = master.map(row => {
-        const name = row[3]; // Entity Name from Tab 3
+        const name = row[3];
         if (!name) return "";
         
-        const xp = row[6] || 0; // Assuming Column G is Event XP
-        const strikes = row[7] || 0;
-        const timeline = logStats[name] || { d7:0, d14:0, d28:0, currentWeek:0, lastWeek:0 };
-        
-        // Simple Growth Calculation
-        const growth = timeline.lastWeek === 0 ? 0 : Math.round(((timeline.currentWeek - timeline.lastWeek) / timeline.lastWeek) * 100);
-        const growthColor = growth >= 0 ? "#2ecc71" : "#e74c3c";
+        const eventCount = logStats[name] || 0;
+        const status = eventCount > 3 ? 'GROWING' : 'DORMANT'; // Custom threshold
+        const statusClass = eventCount > 3 ? 'status-growing' : 'status-dormant';
 
         return `
             <div class="report-card">
-                <div class="card-header">
-                    <span>XP: ${xp}</span>
-                    <span>STRIKES: ${strikes}</span>
-                </div>
+                <div class="status-tag ${statusClass}">${status}</div>
                 <h3>${name}</h3>
-                <div class="timeline-grid">
-                    <div class="time-box"><span>7D</span><strong>${timeline.d7}</strong></div>
-                    <div class="time-box"><span>14D</span><strong>${timeline.d14}</strong></div>
-                    <div class="time-box"><span>28D</span><strong>${timeline.d28}</strong></div>
+                <div class="stats-row">
+                    <div class="stat-item"><span>XP</span><strong>${row[6] || 0}</strong></div>
+                    <div class="stat-item"><span>EVENTS</span><strong>${eventCount}</strong></div>
+                    <div class="stat-item"><span>STRIKES</span><strong>${row[7] || 0}</strong></div>
                 </div>
-                <div class="growth-tag" style="color:${growthColor}">
-                    Growth: ${growth > 0 ? '+' : ''}${growth}% (Events)
-                </div>
-                <div class="notice-bar">${row[9] || "No current notices"}</div>
             </div>
         `;
     }).join('');
-    
-    document.getElementById('counter').innerText = "SYNCED";
+
+    // 4. Render Host Leaderboard
+    const lb = document.getElementById('host-leaderboard');
+    lb.innerHTML = Object.entries(hosterCounts)
+        .sort((a,b) => b[1]-a[1])
+        .slice(0, 5)
+        .map((entry, i) => `
+            <div class="leader-row">
+                <span>${i+1}. ${entry[0]}</span>
+                <span>${entry[1]} Events</span>
+            </div>
+        `).join('');
+
+    document.getElementById('counter').innerText = "LIVE SYNCED";
 }
 
 loadData();

@@ -1,42 +1,36 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Entity Dashboard</title>
-    <!-- THIS LINE IS CRITICAL -->
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <div class="outer-frame">
-        <div class="inner-container">
-            <div class="header-flex">
-                <div class="title-container">
-                    <img src="emblem.png" alt="Emblem" class="header-logo">
-                    <h1>Entity Dashboard</h1>
-                </div>
+<div class="dashboard-container">
+    <header class="main-header">
+        <img src="emblem.png" alt="Logo" class="emblem">
+        <h1>Entity Dashboard</h1>
+        <div id="counter">SYNCING...</div>
+    </header>
 
-                <div class="leaderboard-row">
-                    <div class="top-card">
-                        <span class="label">🏆 BEST ENTITY</span>
-                        <span id="best-entity">LOADING...</span>
-                    </div>
-                    <div class="top-card">
-                        <span class="label">🔥 TOP HOSTER</span>
-                        <span id="best-hoster">LOADING...</span>
-                    </div>
-                </div>
-
-                <div class="status-bar">
-                    <span id="counter">INITIALIZING...</span>
-                </div>
-            </div>
-
-            <div id="entity-grid" class="entity-grid">
-                <!-- Data will load here -->
-            </div>
+    <!-- Professional Top Cards -->
+    <div class="top-stats-grid">
+        <div class="stat-card">
+            <span class="label">🏆 BEST ENTITY</span>
+            <h2 id="best-entity">Loading...</h2>
+            <span class="sub-label" id="best-entity-xp">0 XP This Week</span>
+        </div>
+        <div class="stat-card">
+            <span class="label">🔥 TOP HOSTER</span>
+            <h2 id="best-hoster">Loading...</h2>
+            <span class="sub-label" id="best-hoster-count">0 Events</span>
         </div>
     </div>
-    <script src="script.js"></script>
-</body>
-</html>
+
+    <section class="grid-section">
+        <h2>Entity Reports</h2>
+        <div id="entity-grid" class="entity-grid">
+            <!-- Cards go here -->
+        </div>
+    </section>
+
+    <!-- New Leaderboard Section -->
+    <section class="leaderboard-section">
+        <h2>Host Leaderboard</h2>
+        <div id="host-leaderboard" class="leaderboard-list">
+            <!-- List goes here -->
+        </div>
+    </section>
+</div>

@@ -87,3 +87,52 @@ h3 { color: #fff; margin: 5px 0; text-transform: uppercase; font-size: 1.3rem; }
     padding: 5px;
     border-radius: 4px;
 }
+/* Keep your existing body/background colors */
+
+.top-stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.stat-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid #444;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: left;
+}
+
+.stat-card .label { color: #888; font-size: 0.8rem; }
+.stat-card h2 { margin: 10px 0; color: #fff; }
+
+/* Status Tags for the Cards */
+.status-tag {
+    font-size: 0.65rem;
+    padding: 4px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    font-weight: bold;
+    margin-bottom: 10px;
+    display: inline-block;
+}
+
+.status-growing { background: rgba(46, 204, 113, 0.2); color: #2ecc71; border: 1px solid #2ecc71; }
+.status-dormant { background: rgba(255, 255, 255, 0.1); color: #888; border: 1px solid #444; }
+
+/* Leaderboard Styling */
+.leaderboard-list {
+    background: rgba(0,0,0,0.2);
+    border-radius: 8px;
+    padding: 10px;
+}
+
+.leader-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px;
+    border-bottom: 1px solid #333;
+}
+
+.leader-row:last-child { border: none; }
