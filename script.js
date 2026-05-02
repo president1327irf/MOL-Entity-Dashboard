@@ -1,73 +1,55 @@
-const scriptURL = "https://script.google.com/macros/s/AKfycbzRJ2E7WrLcg5mPd4bUsVo9TtJVPF2QfDj2zRrF_dsEWP5kr11J9tKNE8UlNXPhOhh37A/exec";
+async function loadDashboard() {
+    const response = await fetch("https://script.google.com/macros/s/AKfycbzCTWPOJypCiTOgccdsLcNQzQpniGDbdvObIoO_4nvcYyOLeL-nrYqFRdWqANY_1c_y/exec");
+    const data = await response.json();
+    const master = data.master;
+    const logs = data.logs;
 
-async function loadData() {
-    try {
-        const response = await fetch(scriptURL);
-        const data = await response.json();
-        renderDashboard(data);
-    } catch (error) {
-        console.error("Error fetching data:", error);
-        document.getElementById('counter').innerText = "CONNECTION ERROR";
-    }
-}
+    // 1. Process Logs for Timeline & Leaderboard
+    const logStats = {};
+    const hosterCounts = {};
+    const now = new Date();
 
-function renderDashboard(data) {
-    const grid = document.getElementById('entity-grid');
-    document.getElementById('counter').innerText = `${data.length} TOTAL ENTITIES`;
-    
-    grid.innerHTML = data.map((row) => {
-        const entityName = row[3] || "UNKNOWN";
-        const eventXPS = row[6] || 0;
-        const strikeRaw = row[7] ? row[7].toString().toUpperCase() : "0";
-        const noticeInfo = row[9] || "";
-        const licenseType = row[10] || "STANDARD";
-
-        const isExempt = strikeRaw.includes("EXEMPT");
-        const displayEvents = isExempt ? "EXEMPTED" : eventXPS;
-        const strikes = isExempt ? 0 : (parseInt(strikeRaw) || 0);
-
-        let accentColor = '#2ecc71';
-        let statusText = 'GROWING - ACTIVE';
-        let statusClass = 'card-good';
-        let trendIcon = '▲';
-
-        if (isExempt) {
-            accentColor = '#3498db';
-            statusClass = 'card-exempt';
-            statusText = 'OFFICIAL - EXEMPT';
-        } else if (strikes >= 2) {
-            accentColor = '#e74c3c';
-            statusClass = 'card-declining';
-            statusText = 'DECLINING - ALERT';
-            trendIcon = '▼';
-        } else if (eventXPS === 0) {
-            accentColor = '#95a5a6';
-            statusClass = 'card-dormant';
-            statusText = 'STABLE - DORMANT';
+    logs.forEach(row => {
+        const time = new Date(row[0]);
+        const hoster = row[1];
+        const entity = row[2];
+        
+        if (row[3] === "Event Logging") {
+            hosterCounts[hoster] = (hosterCounts[hoster] || 0) + 1;
+            if (!logStats[entity]) logStats[entity] = { d7: 0, d14: 0, d28: 0 };
+            
+            const diffDays = (now - time) / (1000 * 60 * 60 * 24);
+            if (diffDays <= 7) logStats[entity].d7++;
+            if (diffDays <= 14) logStats[entity].d14++;
+            if (diffDays <= 28) logStats[entity].d28++;
         }
+    });
 
-        let noticeHTML = (noticeInfo && noticeInfo !== "N/A" && noticeInfo !== "") ? 
-            `<div class="notice-bar"><strong>ON NOTICE:</strong> ${noticeInfo}</div>` : "";
+    // Set Leaderboard
+    const topHoster = Object.entries(hosterCounts).sort((a,b) => b[1]-a[1])[0];
+    document.getElementById('best-hoster').innerText = topHoster ? `${topHoster[0]} (${topHoster[1]})` : "N/A";
+
+    // 2. Render Cards (Merging Master Data with Log Stats)
+    const grid = document.getElementById('entity-grid');
+    grid.innerHTML = master.map(row => {
+        const name = row[3];
+        if (!name) return "";
+        const strikes = row[7];
+        const timeline = logStats[name] || { d7: 0, d14: 0, d28: 0 };
 
         return `
-          <div class="report-card ${statusClass}">
-            <div class="status-row" style="color: ${accentColor}">
-              <span>${statusText}</span>
-              <span class="license-tag">${licenseType}</span>
+            <div class="report-card">
+                <div class="card-header">
+                    <h3>${name}</h3>
+                    <span class="strike-count">STRIKES: ${strikes}</span>
+                </div>
+                <div class="timeline-row">
+                    <div class="t-box"><span>7D</span><strong>${timeline.d7}</strong></div>
+                    <div class="t-box"><span>14D</span><strong>${timeline.d14}</strong></div>
+                    <div class="t-box"><span>28D</span><strong>${timeline.d28}</strong></div>
+                </div>
+                <div class="notice-area">${row[9] || "No current notices"}</div>
             </div>
-            <h3>${entityName}</h3>
-            <div class="stats-grid">
-              <div class="stat-item"><span class="stat-label">Event XP</span><span class="stat-value">${displayEvents}</span></div>
-              <div class="stat-item"><span class="stat-label">STRIKES</span><span class="stat-value">${isExempt ? 'N/A' : strikes}</span></div>
-              <div class="stat-item"><span class="stat-label">GROWTH</span><span class="stat-value" style="color: ${accentColor}">${trendIcon} 0%</span></div>
-            </div>
-            ${noticeHTML}
-          </div>`;
+        `;
     }).join('');
 }
-
-
-loadData();
-
-// Refresh data every 2 minutes
-setInterval(loadData, 120000);

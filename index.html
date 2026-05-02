@@ -1,27 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Entity Dashboard</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <div class="outer-frame">
-        <div class="inner-container">
-            <div class="header-flex">
-                <!-- This container aligns the logo and title side-by-side -->
-                <div class="title-container">
-                    <img src="1d0f5fec-ff25-43a3-a46e-ec5a76dd300d-removebg-preview.png" alt="Emblem" class="header-logo">
-                    <h1>Entity Dashboard</h1>
-                </div>
-                <span id="counter">INITIALIZING...</span>
-            </div>
-            <div id="entity-grid" class="entity-grid">
-                <!-- Cards will be generated here by script.js -->
-            </div>
+<div class="header-flex">
+    <div class="title-container">
+        <img src="1d0f5fec-ff25-43a3-a46e-ec5a76dd300d-removebg-preview.png" alt="Emblem" class="header-logo">
+        <h1>Entity Dashboard</h1>
+    </div>
+
+    <!-- New Leaderboard Section -->
+    <div class="leaderboard-row">
+        <div class="stat-highlight">
+            <span class="label">🏆 BEST ENTITY</span>
+            <span id="best-entity">---</span>
+        </div>
+        <div class="stat-highlight">
+            <span class="label">🔥 TOP HOSTER</span>
+            <span id="best-hoster">---</span>
         </div>
     </div>
-    <script src="script.js"></script>
-</body>
-</html>
+
+    <div class="search-bar-container">
+        <input type="text" id="entitySearch" placeholder="Search for an entity..." onkeyup="filterCards()">
+    </div>
+</div>
+
+<div id="entity-grid" class="entity-grid">
+    <!-- Cards will load here -->
+</div>
