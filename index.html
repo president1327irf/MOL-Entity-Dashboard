@@ -1,36 +1,45 @@
-<div class="dashboard-container">
-    <header class="main-header">
-        <img src="emblem.png" alt="Logo" class="emblem">
-        <h1>Entity Dashboard</h1>
-        <div id="counter">SYNCING...</div>
-    </header>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Federation Analytics</title>
+    <!-- DOUBLE CHECK THIS FILENAME BELOW -->
+    <link rel="stylesheet" href="style.css"> 
+</head>
+<body>
+    <div class="dashboard-container">
+        <header class="main-header">
+            <img src="1d0f5fec-ff25-43a3-a46e-ec5a76dd300d-removebg-preview.png" alt="Emblem" class="emblem">
+            <h1>ENTITY DASHBOARD</h1>
+            <div id="counter" class="sync-status">SYNCING...</div>
+        </header>
 
-    <!-- Professional Top Cards -->
-    <div class="top-stats-grid">
-        <div class="stat-card">
-            <span class="label">🏆 BEST ENTITY</span>
-            <h2 id="best-entity">Loading...</h2>
-            <span class="sub-label" id="best-entity-xp">0 XP This Week</span>
+        <div class="top-stats-grid">
+            <div class="stat-card">
+                <span class="label">🏆 BEST ENTITY</span>
+                <h2 id="best-entity">Loading...</h2>
+                <div id="best-entity-xp" class="sub-label">0 XP This Week</div>
+            </div>
+            <div class="stat-card">
+                <span class="label">🔥 TOP HOSTER</span>
+                <h2 id="best-hoster">Loading...</h2>
+                <div id="best-hoster-count" class="sub-label">0 Events</div>
+            </div>
         </div>
-        <div class="stat-card">
-            <span class="label">🔥 TOP HOSTER</span>
-            <h2 id="best-hoster">Loading...</h2>
-            <span class="sub-label" id="best-hoster-count">0 Events</span>
+
+        <div class="content-layout">
+            <section class="grid-section">
+                <h2 class="section-title">Entity Reports</h2>
+                <div id="entity-grid" class="entity-grid"></div>
+            </section>
+
+            <section class="leaderboard-section">
+                <h2 class="section-title">Host Leaderboard</h2>
+                <div id="host-leaderboard" class="leaderboard-list"></div>
+            </section>
         </div>
     </div>
-
-    <section class="grid-section">
-        <h2>Entity Reports</h2>
-        <div id="entity-grid" class="entity-grid">
-            <!-- Cards go here -->
-        </div>
-    </section>
-
-    <!-- New Leaderboard Section -->
-    <section class="leaderboard-section">
-        <h2>Host Leaderboard</h2>
-        <div id="host-leaderboard" class="leaderboard-list">
-            <!-- List goes here -->
-        </div>
-    </section>
-</div>
+    <script src="script.js"></script>
+</body>
+</html>
