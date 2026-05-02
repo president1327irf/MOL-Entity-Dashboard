@@ -1,55 +1,70 @@
-async function loadDashboard() {
-    const response = await fetch("https://script.google.com/macros/s/AKfycbzCTWPOJypCiTOgccdsLcNQzQpniGDbdvObIoO_4nvcYyOLeL-nrYqFRdWqANY_1c_y/exec");
-    const data = await response.json();
-    const master = data.master;
-    const logs = data.logs;
+const scriptURL = "https://script.google.com/macros/s/AKfycbzCTWPOJypCiTOgccdsLcNQzQpniGDbdvObIoO_4nvcYyOLeL-nrYqFRdWqANY_1c_y/exec";
 
-    // 1. Process Logs for Timeline & Leaderboard
-    const logStats = {};
-    const hosterCounts = {};
-    const now = new Date();
-
-    logs.forEach(row => {
-        const time = new Date(row[0]);
-        const hoster = row[1];
-        const entity = row[2];
+async function loadData() {
+    try {
+        const response = await fetch(scriptURL);
+        const data = await response.json();
+        const master = data.master; // From Tab 3
+        const logs = data.logs;     // From Tab 17
         
-        if (row[3] === "Event Logging") {
-            hosterCounts[hoster] = (hosterCounts[hoster] || 0) + 1;
-            if (!logStats[entity]) logStats[entity] = { d7: 0, d14: 0, d28: 0 };
-            
-            const diffDays = (now - time) / (1000 * 60 * 60 * 24);
-            if (diffDays <= 7) logStats[entity].d7++;
-            if (diffDays <= 14) logStats[entity].d14++;
-            if (diffDays <= 28) logStats[entity].d28++;
-        }
-    });
+        const now = new Date();
+        const logStats = {};
+        const hosters = {};
 
-    // Set Leaderboard
-    const topHoster = Object.entries(hosterCounts).sort((a,b) => b[1]-a[1])[0];
-    document.getElementById('best-hoster').innerText = topHoster ? `${topHoster[0]} (${topHoster[1]})` : "N/A";
+        // 1. Process Timeline & Leaderboard from Logs
+        logs.forEach(row => {
+            const time = new Date(row[0]);
+            const hoster = row[1];
+            const entity = row[2];
+            if (row[3] === "Event Logging") {
+                hosters[hoster] = (hosters[hoster] || 0) + 1;
+                if (!logStats[entity]) logStats[entity] = { d7:0, d14:0, d28:0, total:0 };
+                const diff = (now - time) / (1000*60*60*24);
+                if (diff <= 7) logStats[entity].d7++;
+                if (diff <= 14) logStats[entity].d14++;
+                if (diff <= 28) logStats[entity].d28++;
+                logStats[entity].total++;
+            }
+        });
 
-    // 2. Render Cards (Merging Master Data with Log Stats)
-    const grid = document.getElementById('entity-grid');
-    grid.innerHTML = master.map(row => {
-        const name = row[3];
-        if (!name) return "";
-        const strikes = row[7];
-        const timeline = logStats[name] || { d7: 0, d14: 0, d28: 0 };
+        // Set Best Hoster
+        const topHoster = Object.entries(hosters).sort((a,b) => b[1]-a[1])[0];
+        document.getElementById('best-hoster').innerText = topHoster ? `${topHoster[0]} (${topHoster[1]})` : "---";
 
-        return `
-            <div class="report-card">
-                <div class="card-header">
+        // 2. Render Cards
+        const grid = document.getElementById('entity-grid');
+        grid.innerHTML = master.map(row => {
+            const name = row[3];
+            if (!name) return "";
+            const strikes = row[7] || 0;
+            const notice = row[9] || "No current notices";
+            const timeline = logStats[name] || { d7:0, d14:0, d28:0 };
+
+            return `
+                <div class="report-card">
+                    <div class="card-header">
+                        <span>OFFICIAL REPORT</span>
+                        <span>STRIKES: ${strikes}</span>
+                    </div>
                     <h3>${name}</h3>
-                    <span class="strike-count">STRIKES: ${strikes}</span>
+                    <div class="timeline-grid">
+                        <div class="time-box"><span>7D</span><strong>${timeline.d7}</strong></div>
+                        <div class="time-box"><span>14D</span><strong>${timeline.d14}</strong></div>
+                        <div class="time-box"><span>28D</span><strong>${timeline.d28}</strong></div>
+                    </div>
+                    <div class="notice-bar"><strong>NOTICE:</strong> ${notice}</div>
                 </div>
-                <div class="timeline-row">
-                    <div class="t-box"><span>7D</span><strong>${timeline.d7}</strong></div>
-                    <div class="t-box"><span>14D</span><strong>${timeline.d14}</strong></div>
-                    <div class="t-box"><span>28D</span><strong>${timeline.d28}</strong></div>
-                </div>
-                <div class="notice-area">${row[9] || "No current notices"}</div>
-            </div>
-        `;
-    }).join('');
+            `;
+        }).join('');
+        document.getElementById('counter').innerText = `${master.length} ENTITIES`;
+    } catch (e) { console.error(e); }
 }
+
+function filterCards() {
+    let val = document.getElementById('searchInput').value.toUpperCase();
+    let cards = document.getElementsByClassName('report-card');
+    for (let c of cards) {
+        c.style.display = c.innerText.toUpperCase().includes(val) ? "" : "none";
+    }
+}
+loadData();

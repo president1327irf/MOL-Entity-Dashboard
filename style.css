@@ -1,24 +1,20 @@
-/* Color Palette & Variables */
 :root { 
   --bg-burgundy: #2c1a1a; 
   --frame-color: #6d3d3d; 
   --header-rose: #c6a3a3; 
-  --card-text: #ffffff; 
   --label-color: #e2caca; 
   --notice-yellow: #ffcc00; 
 }
 
-/* Base Body Styling */
 body { 
   background-color: var(--bg-burgundy); 
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-  padding: 20px; 
+  font-family: 'Segoe UI', sans-serif; 
+  margin: 0; 
   display: flex; 
   justify-content: center; 
-  margin: 0;
+  padding: 20px;
 }
 
-/* Main Outer Frame */
 .outer-frame { 
   background-color: var(--frame-color); 
   padding: 15px; 
@@ -27,127 +23,59 @@ body {
   max-width: 1300px; 
 }
 
-/* Inner Content Container */
 .inner-container { 
   background-color: var(--bg-burgundy); 
   padding: 30px; 
   min-height: 90vh; 
 }
 
-/* Header Layout - Centered for the Emblem and Title */
 .header-flex { 
   display: flex; 
-  flex-direction: column; /* Stacks the title group and counter vertically */
+  flex-direction: column; 
   align-items: center; 
   margin-bottom: 30px; 
   border-bottom: 1px solid var(--frame-color); 
   padding-bottom: 20px; 
-  gap: 15px;
+  gap: 20px;
 }
 
-/* Container for Emblem + Title */
-.title-container {
-    display: flex;
-    flex-direction: column; /* Puts the image above the text */
-    align-items: center;
-    gap: 10px; 
-}
+.title-container { text-align: center; }
+.header-logo { height: 100px; width: auto; margin-bottom: 10px; }
+h1 { color: var(--header-rose); margin: 0; font-family: serif; font-size: 2.5rem; }
 
-/* Emblem Styling */
-.header-logo {
-    height: 120px; /* Large size for the top-center position */
-    width: auto;
-    display: block;
-    /* Optional: helps the logo pop against the dark background */
-    filter: drop-shadow(0px 4px 8px rgba(0,0,0,0.5));
-}
-
-h1 { 
-    color: var(--header-rose); 
-    font-family: 'Georgia', serif; 
-    font-size: 2.8rem; 
-    margin: 0; 
-    text-align: center;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-}
-
-#counter { 
-    color: var(--label-color); 
-    font-weight: bold; 
-    font-size: 0.9rem;
-    letter-spacing: 1px;
-}
-
-/* Grid Layout for Entity Cards */
-.entity-grid { 
-  display: grid; 
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); 
-  gap: 20px; 
-}
-
-/* Individual Card Styling */
-.report-card { 
-    border: 2px solid #000; 
-    outline-offset: -8px; 
-    position: relative; 
-    padding: 25px; 
-    background: rgba(0, 0, 0, 0.2); 
-}
-
-/* Status Outline Colors */
-.card-good { outline: 2px solid #2ecc71; }
-.card-declining { outline: 2px solid #e74c3c; }
-.card-dormant { outline: 2px solid #95a5a6; }
-.card-exempt { outline: 2px solid #3498db; }
-
-/* Status Row inside Card */
-.status-row { 
-    display: flex; 
-    justify-content: space-between; 
-    align-items: center; 
-    font-size: 0.7rem; 
-    font-weight: 900; 
-    margin-bottom: 10px; 
-}
-
-.license-tag { 
-    background: rgba(0,0,0,0.5); 
-    padding: 2px 8px; 
-    border: 1px solid rgba(255,255,255,0.2); 
+.leaderboard-row { display: flex; gap: 15px; width: 100%; justify-content: center; }
+.top-card { 
+    background: rgba(0,0,0,0.3); 
+    padding: 15px; 
+    border: 1px solid var(--frame-color); 
     border-radius: 4px; 
-    color: var(--label-color); 
+    min-width: 200px; 
+    text-align: center;
+}
+.top-card .label { display: block; font-size: 0.7rem; color: var(--header-rose); margin-bottom: 5px; }
+.top-card span:last-child { color: #fff; font-weight: bold; }
+
+.search-section { display: flex; width: 100%; justify-content: space-between; align-items: center; }
+#searchInput { background: #1a0f0f; border: 1px solid var(--frame-color); color: #fff; padding: 8px; width: 250px; }
+#counter { color: var(--label-color); font-weight: bold; }
+
+.entity-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
+
+.report-card { 
+    background: rgba(0,0,0,0.2); 
+    border: 2px solid #000; 
+    padding: 20px; 
+    position: relative; 
+    outline: 2px solid #2ecc71; /* Default status */
+    outline-offset: -8px;
 }
 
-h3 { 
-    color: #fff; 
-    text-transform: uppercase; 
-    margin: 10px 0; 
-    font-size: 1.3rem; 
-}
+.card-header { display: flex; justify-content: space-between; color: var(--label-color); font-size: 0.7rem; font-weight: bold; margin-bottom: 10px; }
+h3 { color: #fff; margin: 5px 0; text-transform: uppercase; }
 
-/* Stats Section inside Card */
-.stats-grid { 
-    display: flex; 
-    justify-content: space-between; 
-    margin-top: 15px; 
-    border-top: 1px solid rgba(255,255,255,0.1); 
-    padding-top: 15px; 
-}
+.timeline-grid { display: flex; justify-content: space-between; background: rgba(0,0,0,0.4); padding: 10px; margin: 15px 0; border-radius: 4px; }
+.time-box { text-align: center; flex: 1; }
+.time-box span { display: block; font-size: 0.6rem; color: var(--label-color); }
+.time-box strong { color: #fff; font-size: 1.1rem; }
 
-.stat-item { display: flex; flex-direction: column; }
-.stat-label { font-size: 0.65rem; color: var(--label-color); margin-bottom: 5px; text-transform: uppercase; }
-.stat-value { font-size: 1.4rem; font-weight: bold; color: #fff; }
-
-/* Notice Bar Styling */
-.notice-bar { 
-  margin-top: 15px; 
-  padding: 8px; 
-  background: rgba(0,0,0,0.6); 
-  border: 1px solid #000; 
-  color: var(--notice-yellow); 
-  font-size: 0.75rem; 
-  font-weight: bold; 
-  outline: 1px solid rgba(255,204,0,0.3); 
-  outline-offset: -4px; 
-}
+.notice-bar { background: rgba(0,0,0,0.5); padding: 8px; color: var(--notice-yellow); font-size: 0.75rem; border: 1px solid #000; margin-top: 10px; }
