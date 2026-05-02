@@ -1,30 +1,42 @@
-<div class="outer-frame">
-    <div class="inner-container">
-        <div class="header-flex">
-            <div class="title-container">
-                <!-- Verbatim filename reference to your new image -->
-                <img src="emblem.png" alt="Emblem" class="header-logo">
-                <h1>Entity Dashboard</h1>
-            </div>
-
-            <div class="leaderboard-row">
-                <div class="top-card">
-                    <span class="label">🏆 BEST ENTITY</span>
-                    <span id="best-entity">LOADING...</span>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entity Dashboard</title>
+    <!-- THIS LINE IS CRITICAL -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="outer-frame">
+        <div class="inner-container">
+            <div class="header-flex">
+                <div class="title-container">
+                    <img src="emblem.png" alt="Emblem" class="header-logo">
+                    <h1>Entity Dashboard</h1>
                 </div>
-                <div class="top-card">
-                    <span class="label">🔥 TOP HOSTER</span>
-                    <span id="best-hoster">LOADING...</span>
+
+                <div class="leaderboard-row">
+                    <div class="top-card">
+                        <span class="label">🏆 BEST ENTITY</span>
+                        <span id="best-entity">LOADING...</span>
+                    </div>
+                    <div class="top-card">
+                        <span class="label">🔥 TOP HOSTER</span>
+                        <span id="best-hoster">LOADING...</span>
+                    </div>
+                </div>
+
+                <div class="status-bar">
+                    <span id="counter">INITIALIZING...</span>
                 </div>
             </div>
 
-            <div class="status-bar">
-                <span id="counter">INITIALIZING...</span>
+            <div id="entity-grid" class="entity-grid">
+                <!-- Data will load here -->
             </div>
-        </div>
-
-        <div id="entity-grid" class="entity-grid">
-            <!-- Cards populate here -->
         </div>
     </div>
-</div>
+    <script src="script.js"></script>
+</body>
+</html>

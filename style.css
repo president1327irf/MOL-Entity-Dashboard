@@ -40,19 +40,10 @@ body {
 }
 
 .title-container { text-align: center; }
-
-/* Adjusted size for the center emblem */
-.header-logo { 
-    height: 110px; 
-    width: auto; 
-    margin-bottom: 10px;
-    filter: drop-shadow(0px 4px 10px rgba(0,0,0,0.5)); 
-}
-
+.header-logo { height: 110px; width: auto; margin-bottom: 10px; }
 h1 { color: var(--header-rose); margin: 0; font-family: serif; font-size: 2.5rem; text-transform: uppercase; }
 
 .leaderboard-row { display: flex; gap: 15px; width: 100%; justify-content: center; }
-
 .top-card { 
     background: rgba(0,0,0,0.4); 
     padding: 15px; 
@@ -61,16 +52,14 @@ h1 { color: var(--header-rose); margin: 0; font-family: serif; font-size: 2.5rem
     min-width: 220px; 
     text-align: center;
 }
-
 .top-card .label { display: block; font-size: 0.7rem; color: var(--header-rose); margin-bottom: 5px; font-weight: bold; }
 .top-card span:last-child { color: #fff; font-size: 1.1rem; }
 
-.status-bar { width: 100%; text-align: right; margin-top: 10px; }
+.status-bar { width: 100%; text-align: center; margin-top: 10px; }
 #counter { color: var(--label-color); font-weight: bold; font-size: 0.8rem; }
 
 .entity-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
 
-/* Restored original Card Styling */
 .report-card { 
     background: rgba(0,0,0,0.2); 
     border: 2px solid #000; 
