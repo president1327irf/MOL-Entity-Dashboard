@@ -1,0 +1,77 @@
+:root { 
+  --bg-burgundy: #2c1a1a; 
+  --frame-color: #6d3d3d; 
+  --header-rose: #c6a3a3; 
+  --card-text: #ffffff; 
+  --label-color: #e2caca; 
+  --notice-yellow: #ffcc00; 
+}
+
+body { 
+  background-color: var(--bg-burgundy); 
+  font-family: 'Segoe UI', sans-serif; 
+  padding: 20px; 
+  display: flex; 
+  justify-content: center; 
+  margin: 0;
+}
+
+.outer-frame { 
+  background-color: var(--frame-color); 
+  padding: 15px; 
+  border: 3px solid #1a0f0f; 
+  width: 100%; 
+  max-width: 1300px; 
+}
+
+.inner-container { 
+  background-color: var(--bg-burgundy); 
+  padding: 30px; 
+  min-height: 90vh; 
+}
+
+.header-flex { 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: flex-end; 
+  margin-bottom: 30px; 
+  border-bottom: 1px solid var(--frame-color); 
+  padding-bottom: 10px; 
+}
+
+h1 { color: var(--header-rose); font-family: serif; font-size: 2.5rem; margin: 0; }
+#counter { color: var(--label-color); font-weight: bold; }
+
+.entity-grid { 
+  display: grid; 
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); 
+  gap: 20px; 
+}
+
+.report-card { border: 2px solid #000; outline-offset: -8px; position: relative; padding: 25px; background: transparent; }
+.card-good { outline: 2px solid #2ecc71; }
+.card-declining { outline: 2px solid #e74c3c; }
+.card-dormant { outline: 2px solid #95a5a6; }
+.card-exempt { outline: 2px solid #3498db; }
+
+.status-row { display: flex; justify-content: space-between; align-items: center; font-size: 0.7rem; font-weight: 900; margin-bottom: 10px; }
+.license-tag { background: rgba(0,0,0,0.3); padding: 2px 8px; border: 1px solid rgba(255,255,255,0.2); border-radius: 4px; color: var(--label-color); text-transform: uppercase; }
+
+h3 { color: #fff; text-transform: uppercase; margin: 10px 0; font-size: 1.2rem; }
+
+.stats-grid { display: flex; justify-content: space-between; margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px; }
+.stat-item { display: flex; flex-direction: column; }
+.stat-label { font-size: 0.65rem; color: var(--label-color); margin-bottom: 5px; }
+.stat-value { font-size: 1.3rem; font-weight: bold; color: #fff; }
+
+.notice-bar { 
+  margin-top: 15px; 
+  padding: 8px; 
+  background: rgba(0,0,0,0.4); 
+  border: 1px solid #000; 
+  color: var(--notice-yellow); 
+  font-size: 0.75rem; 
+  font-weight: bold; 
+  outline: 1px solid rgba(255,204,0,0.3); 
+  outline-offset: -4px; 
+}
